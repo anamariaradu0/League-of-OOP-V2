@@ -1,0 +1,22 @@
+Ana-Maria Radu, 324CA
+
+League of OOP, November 2019
+
+My take on this game is as follows:
+
+Seen as the Land does not have complex operations attributed to it, I chose not to define
+special classes for it.
+
+My heroes are generated using a hero factory. The interface IHero allows for double
+dispatch, while the abstract class Hero is a starting point for all types of fighters.
+
+Seen as my heroes can be both visitors and visitable instances, I chose to tweak my
+double dispatch implementation: a hero can both accept and perform an action (here,
+fighting). This made sense to me as each fight is closely tied to the hero's current
+state and current opponent, so creating different classes for each type of fight would
+have made the implementation harder and not as natural for me (and this is only my
+opinion).
+
+Seen as heroes are both visitors and visitable objects, all that I had to implement
+in each hero's class was fighting with the 4 types of opponents, keeping in mind each
+particular case and all of the bonuses.
