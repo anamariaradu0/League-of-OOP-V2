@@ -172,7 +172,9 @@ public final class Pyromancer extends Hero {
     @Override
     public void lifeGiverAction() {
         this.addHp(80);
-        System.out.println("I AM GIVING LIFE TO PYRO\n");
+        if (this.getHp() > PYR_INIT_HP + level * PYR_LVL_HP) {
+            this.hp = PYR_INIT_HP + level * PYR_LVL_HP;
+        }
     }
 
     @Override
@@ -182,6 +184,14 @@ public final class Pyromancer extends Hero {
         this.setXp(nextXp - this.xp);
         this.levelUp();
         this.angelDamage += 0.20;
+    }
+
+    @Override
+    public void spawn() {
+        if (this.isDead() == true) {
+            this.setDead(false);
+            this.setHp(150);
+        }
     }
 
     public void levelUp() {

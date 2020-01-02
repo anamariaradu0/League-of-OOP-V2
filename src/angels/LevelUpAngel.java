@@ -10,7 +10,8 @@ public class LevelUpAngel extends Angel {
     }
 
     public static void action(Hero h) {
-        h.levelUpAction();
+        if (h.isDead() == false)
+            h.levelUpAction();
     }
 
     protected static void print(int x, int y, String type, int id, fileio.FileSystem fs) throws IOException {

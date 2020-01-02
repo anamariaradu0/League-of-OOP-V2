@@ -10,9 +10,11 @@ public final class Cell {
     private char type;
     private int noHeroes;
     private ArrayList<Hero> currentHeroes;
+    private ArrayList<Hero> allHeroes;
 
     public Cell() {
         currentHeroes = new ArrayList<>();
+        allHeroes = new ArrayList<>();
         noHeroes = 0;
     }
 
@@ -26,6 +28,7 @@ public final class Cell {
 
     public void addHero(Hero h) {
         currentHeroes.add(h);
+        allHeroes.add(h);
     }
 
     public void removeHero(Hero h) {
@@ -37,6 +40,10 @@ public final class Cell {
     }
 
     public ArrayList<Hero> getHeroes() { return currentHeroes; }
+
+    public ArrayList<Hero> getAllHeroes() {
+        return allHeroes;
+    }
 
     public void applyEffects() {
         for (Hero h : currentHeroes) {
@@ -61,14 +68,14 @@ public final class Cell {
         if (currentHeroes.get(0).isDead() && currentHeroes.get(1).isDead()) {
             currentHeroes.get(0).levelUp();
             currentHeroes.get(1).levelUp();
-            removeHero(currentHeroes.get(1));
-            removeHero(currentHeroes.get(0));
+            // removeHero(currentHeroes.get(1));
+            // removeHero(currentHeroes.get(0));
         } else if (currentHeroes.get(0).isDead()) {
             currentHeroes.get(1).levelUp();
-            removeHero(currentHeroes.get(0));
+            // removeHero(currentHeroes.get(0));
         } else if (currentHeroes.get(1).isDead()) {
             currentHeroes.get(0).levelUp();
-            removeHero(currentHeroes.get(1));
+            // removeHero(currentHeroes.get(1));
         }
     }
 }

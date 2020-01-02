@@ -1,5 +1,8 @@
 package heroes;
 
+import magician.GrandMagician;
+import magician.ObserveHeroKill;
+
 import static common.Constants.*;
 import static java.lang.Math.max;
 
@@ -22,12 +25,12 @@ public final class Knight extends Hero {
 
 
     @Override
-    public void fight(IHero h) {
+    public void fight(IHero h, fileio.FileSystem fs) {
         h.fight(this);
     }
 
     @Override
-    public void fight(Knight k) {
+    public void fight(Knight k, fileio.FileSystem fs) {
         System.out.println("ANGEL DAMAGE IS " + angelDamage + "\n");
         double hpLimit = k.getHp() * EXECUTE_LIMIT;
         if (k.getHp() < hpLimit) {
@@ -67,6 +70,8 @@ public final class Knight extends Hero {
                 k.setDead(true);
                 int xp = max(0, MAX_XP_LIMIT - (this.level - k.getLevel()) * MAX_XP_MULTIPLIER);
                 this.setXp(xp);
+                ObserveHeroKill obs = new ObserveHeroKill();
+                obs.heroKill(this, k, fs);
             }
         }
     }
@@ -237,14 +242,25 @@ public final class Knight extends Hero {
     @Override
     public void lifeGiverAction() {
         this.addHp(100);
+        if (this.getHp() > KNI_INIT_HP + level * KNI_LVL_HP) {
+            this.hp = KNI_INIT_HP + level * KNI_LVL_HP;
+        }
     }
 
     @Override
     public void levelUpAction() {
-        int nextXp = MAX_LVL_XP_LIMIT + (level + 1) * MAX_LVL_XP_MULTIPLIER;
+        int nextXp = MAX_LVL_XP_LIMIT + level * MAX_LVL_XP_MULTIPLIER;
         this.setXp(nextXp - this.xp);
         this.levelUp();
         this.angelDamage += 0.10;
+    }
+
+    @Override
+    public void spawn() {
+        if (this.isDead() == true) {
+            this.setDead(false);
+            this.setHp(200);
+        }
     }
 
     public void levelUp() {

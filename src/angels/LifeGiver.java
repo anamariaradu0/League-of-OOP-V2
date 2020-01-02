@@ -10,7 +10,8 @@ public class LifeGiver extends Angel {
     }
 
     public static void action(Hero h) {
-        h.lifeGiverAction();
+        if (h.isDead() == false)
+            h.lifeGiverAction();
     }
 
     protected static void print(int x, int y, String type, int id, fileio.FileSystem fs) throws IOException {

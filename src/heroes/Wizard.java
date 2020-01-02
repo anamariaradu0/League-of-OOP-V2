@@ -210,14 +210,25 @@ public final class Wizard extends Hero {
     @Override
     public void lifeGiverAction() {
         this.addHp(120);
+        if (this.getHp() > WIZ_INIT_HP + level * WIZ_LVL_HP) {
+            this.hp = WIZ_INIT_HP + level * WIZ_LVL_HP;
+        }
     }
 
     @Override
     public void levelUpAction() {
-        int nextXp = MAX_LVL_XP_LIMIT + (level + 1) * MAX_LVL_XP_MULTIPLIER;
+        int nextXp = MAX_LVL_XP_LIMIT + level * MAX_LVL_XP_MULTIPLIER;
         this.setXp(nextXp - this.xp);
         this.levelUp();
         this.angelDamage += 0.25;
+    }
+
+    @Override
+    public void spawn() {
+        if (this.isDead() == true) {
+            this.setDead(false);
+            this.setHp(120);
+        }
     }
 
     public void levelUp() {

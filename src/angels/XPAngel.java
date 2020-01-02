@@ -10,21 +10,27 @@ public class XPAngel extends Angel {
     }
 
     public static void action(Hero h) {
-        switch (h.type) {
-            case "Knight":
-                h.setXp(45);
-                break;
-            case "Pyromancer":
-                h.setXp(50);
-                break;
-            case "Rogue":
-                h.setXp(40);
-                break;
-            case "Wizard":
-                h.setXp(60);
-                break;
-            default:
-                break;
+        if (h.isDead() == false) {
+            switch (h.type) {
+                case "Knight":
+                    h.setXp(45);
+                    h.levelUp();
+                    break;
+                case "Pyromancer":
+                    h.setXp(50);
+                    h.levelUp();
+                    break;
+                case "Rogue":
+                    h.setXp(40);
+                    h.levelUp();
+                    break;
+                case "Wizard":
+                    h.setXp(60);
+                    h.levelUp();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

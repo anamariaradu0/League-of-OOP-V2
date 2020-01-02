@@ -20,6 +20,7 @@ public abstract class Hero implements IHero {
     protected int kill = 0;
     protected int moveEffect = 0;
     protected double angelDamage = 0;
+    public fileio.FileSystem fs;
 
     public int getId() {
         return id;
@@ -39,6 +40,7 @@ public abstract class Hero implements IHero {
     public abstract void smallAngelAction();
     public abstract void lifeGiverAction();
     public abstract void levelUpAction();
+    public abstract void spawn();
 
     public final int getXp() {
         return xp;

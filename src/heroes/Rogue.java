@@ -176,14 +176,25 @@ public final class Rogue extends Hero {
     @Override
     public void lifeGiverAction() {
         this.addHp(90);
+        if (this.getHp() > ROG_INIT_HP + level * ROG_LVL_HP) {
+            this.hp = ROG_INIT_HP + level * ROG_LVL_HP;
+        }
     }
 
     @Override
     public void levelUpAction() {
-        int nextXp = MAX_LVL_XP_LIMIT + (level + 1) * MAX_LVL_XP_MULTIPLIER;
+        int nextXp = MAX_LVL_XP_LIMIT + level * MAX_LVL_XP_MULTIPLIER;
         this.setXp(nextXp - this.xp);
         this.levelUp();
         this.angelDamage += 0.15;
+    }
+
+    @Override
+    public void spawn() {
+        if (this.isDead() == true) {
+            this.setDead(false);
+            this.setHp(180);
+        }
     }
 
     public void levelUp() {

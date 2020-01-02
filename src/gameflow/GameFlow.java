@@ -107,9 +107,9 @@ public class GameFlow {
 
                 angel.spawnPrint(angX, angY, fs);
 
-                for (Hero h : m.get(angX, angY).getHeroes()) {
+                for (Hero h : m.get(angX, angY).getAllHeroes()) {
                     angel.action(h);
-                    angel.angPrint(angX, angY, h.type, h.getId(), fs);
+                    // angel.angPrint(angX, angY, h.type, h.getId(), fs);
                 }
 
                 // showLeaderBoard(fs);

@@ -10,7 +10,8 @@ public class SmallAngel extends Angel {
     }
 
     public static void action(Hero h) {
-        h.smallAngelAction();
+        if (h.isDead() == false)
+            h.smallAngelAction();
     }
 
     protected static void print(int x, int y, String type, int id, fileio.FileSystem fs) throws IOException {

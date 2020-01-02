@@ -10,7 +10,9 @@ public class TheDoomer extends Angel {
     }
 
     public static void action(Hero h) {
-        h.setDead(true);
+        if (h.isDead()) {
+            h.setDead(true);
+        }
     }
 
     protected static void print(int x, int y, String type, int id, fileio.FileSystem fs) throws IOException {

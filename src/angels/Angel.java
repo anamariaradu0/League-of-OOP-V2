@@ -42,6 +42,12 @@ public class Angel {
             case "LevelUpAngel":
                 LevelUpAngel.action(h);
                 break;
+            case "DarkAngel":
+                DarkAngel.action(h);
+                break;
+            case "Spawner":
+                Spawner.action(h);
+                break;
         }
     }
 
@@ -75,6 +81,12 @@ public class Angel {
                 break;
             case "LevelUpAngel":
                 fs.writeWord("Angel LevelUpAngel was spawned at " + x + " " + y + "\n");
+                break;
+            case "DarkAngel":
+                fs.writeWord("Angel DarkAngel was spawned at " + x + " " + y + "\n");
+                break;
+            case "Spawner":
+                fs.writeWord("Angel Spawner was spawned at " + x + " " + y + "\n");
                 break;
 
         }
@@ -110,6 +122,12 @@ public class Angel {
                 break;
             case "LevelUpAngel":
                 LevelUpAngel.print(x, y, type, id, fs);
+                break;
+            case "DarkAngel":
+                DarkAngel.print(x, y, type, id, fs);
+                break;
+            case "Spawner":
+                Spawner.print(x, y, type, id, fs);
                 break;
         }
     }
