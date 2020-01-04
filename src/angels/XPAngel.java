@@ -1,6 +1,8 @@
 package angels;
 
 import heroes.Hero;
+import magician.GrandMagician;
+import magician.ObserveAngelHelp;
 
 import java.io.IOException;
 
@@ -9,8 +11,10 @@ public class XPAngel extends Angel {
         super(angelDetails);
     }
 
-    public static void action(Hero h) {
+    public void action(Hero h) throws IOException {
         if (h.isDead() == false) {
+            GrandMagician obs = new ObserveAngelHelp();
+            obs.observe(h, null, this);
             switch (h.type) {
                 case "Knight":
                     h.setXp(45);
@@ -31,6 +35,8 @@ public class XPAngel extends Angel {
                 default:
                     break;
             }
+
+
         }
     }
 

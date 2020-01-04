@@ -6,11 +6,14 @@ import heroes.Hero;
 
 import java.io.IOException;
 
-public class ObserveHeroKill extends GrandMagician {
+public class ObserveAngelHit extends GrandMagician {
     @Override
     public void observe(Hero a, Hero b, Angel c) throws IOException {
+        String[] details = Angel.getAngelDetails().split(",");
+        String name = details[0];
+
         fileio.FileSystem fs = GameFlow.getFS();
 
-        fs.writeWord("Player " + b.type + " " + b.getId() + " was killed by " + a.type + " " + a.getId() + "\n");
+        fs.writeWord(name + " hit " + a.type + " " + a.getId() + "\n");
     }
 }

@@ -9,6 +9,7 @@ public class Main {
             FileSystem fs = new FileSystem(args[0], args[1]);
             GameInputLoader gameInputLoader = new GameInputLoader(args[0], args[1]);
             GameInput gameInput = gameInputLoader.load();
+            GameFlow.receiveFS(fs);
             GameFlow.getInput(gameInput);
             GameFlow.addHeroesToMap(gameInput.getMap());
             gameInput.printAngels();

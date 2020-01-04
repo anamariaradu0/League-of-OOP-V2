@@ -1,5 +1,7 @@
 package map;
 
+import heroes.Hero;
+
 public final class Map {
     private static Map instance = null;
 
@@ -56,8 +58,9 @@ public final class Map {
     public void print() {
         for (int i = 0; i < mRows; ++i) {
             for (int j = 0; j < mCols; ++j) {
-                System.out.print(map[i][j].getType());
-                System.out.print(" ");
+                for (Hero k : map[i][j].getAllHeroes()) {
+                    System.out.println(k.type + " " + k.getId() +" "+ k.getRow()+ " " + k.getCol());
+                }
             }
             System.out.println("\n");
         }

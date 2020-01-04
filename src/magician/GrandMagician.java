@@ -1,7 +1,10 @@
 package magician;
 
+import angels.Angel;
 import heroes.Hero;
 
+import java.io.IOException;
+
 public abstract class GrandMagician {
-    public abstract void heroKill(Hero a, Hero b, fileio.FileSystem fs);
+    public abstract void observe(Hero a, Hero b, Angel c) throws IOException;
 }

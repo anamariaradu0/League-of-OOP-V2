@@ -1,6 +1,8 @@
 package angels;
 
 import heroes.Hero;
+import magician.GrandMagician;
+import magician.ObserveAngelHit;
 
 import java.io.IOException;
 
@@ -10,13 +12,11 @@ public class Dracula extends Angel {
         super(angelDetails);
     }
 
-    public static void action(Hero h) {
-        if (h.isDead() == false)
+    public void action(Hero h) throws IOException {
+        if (h.isDead() == false) {
+            GrandMagician obs = new ObserveAngelHit();
+            obs.observe(h, null, this);
             h.draculaDamage();
-    }
-
-    protected static void print(int x, int y, String type, int id, fileio.FileSystem fs) throws IOException {
-        fs.writeWord("Dracula hit " + type + " ");
-        fs.writeWord(id + "\n");
+        }
     }
 }

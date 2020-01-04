@@ -3,9 +3,13 @@ package gameflow;
 import angels.Angel;
 import angels.TheDoomer;
 import angels.XPAngel;
+import fileio.FileSystem;
 import heroes.Hero;
 import heroes.HeroFactory;
+import magician.GrandMagician;
+import magician.ObserveAngelSpawn;
 import main.GameInput;
+import map.Cell;
 import map.Map;
 import strategies.Context;
 
@@ -21,6 +25,15 @@ public class GameFlow {
     private static ArrayList<Hero> heroes;
     private static List<Integer> noAngels;
     private static List<String> angels;
+    public static fileio.FileSystem fs;
+
+    public static void receiveFS(fileio.FileSystem fs) {
+        GameFlow.fs = fs;
+    }
+
+    public static fileio.FileSystem getFS() {
+        return fs;
+    }
 
     public static void getInput(final GameInput input) {
         heroOrder = new ArrayList<>();
@@ -61,6 +74,8 @@ public class GameFlow {
 
     public static void play(Map m, fileio.FileSystem fs) throws IOException {
         for (int i = 0; i < rounds; ++i) {
+            System.out.println("\n");
+            System.out.println("ROUND IS " + (i + 1));
             fs.writeWord("~~ Round ");
             fs.writeInt(i + 1);
             fs.writeWord(" ~~\n");
@@ -68,13 +83,14 @@ public class GameFlow {
             for (int j = 0; j < m.getmRows(); ++j) {
                 for (int k = 0; k < m.getmCols(); ++k) {
                     m.get(j, k).applyEffects();
-                    System.out.println("I AM APPLYING EFFECTS");
                 }
             }
 
             for (Hero h : heroes) {
-                Context context = new Context(h);
-                context.executeStrategy(h);
+                if (h.canMove()) {
+                    Context context = new Context(h);
+                    context.executeStrategy(h);
+                }
             }
 
             for (Hero h : heroes) {
@@ -94,26 +110,27 @@ public class GameFlow {
             for (int j = 0; j < i; ++j) {
                 aux += noAngels.get(j);
             }
-            System.out.println("aux is " + aux);
 
             for (int j = 0; j < noAngels.get(i); ++j) {
                 Angel angel = new Angel(angels.get(aux + j));
 
                 String angelToParse = angels.get(aux + j);
                 String[] angelDetails = angelToParse.split(",");
-                String name = angelDetails[0];
+                // String name = angelDetails[0];
                 int angX = Integer.parseInt(angelDetails[1]);
                 int angY = Integer.parseInt(angelDetails[2]);
 
-                angel.spawnPrint(angX, angY, fs);
+                GrandMagician obs = new ObserveAngelSpawn();
+                obs.observe(null, null, angel);
 
+                m.get(angX, angY).sortCell();
                 for (Hero h : m.get(angX, angY).getAllHeroes()) {
+                    // m.get(angX, angY).printAllHeroes();
                     angel.action(h);
-                    // angel.angPrint(angX, angY, h.type, h.getId(), fs);
                 }
-
-                // showLeaderBoard(fs);
             }
+            // m.print();
+            // showLeaderBoard(fs);
             fs.writeWord("\n");
         }
     }

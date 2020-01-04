@@ -9,14 +9,13 @@ public class PyromancerStrategy implements IStrategy {
     public void applyStrategy(Hero h) {
         System.out.println("PYRO STRATEGY");
         int max_level_hp = PYR_INIT_HP + h.getLevel() * PYR_LVL_HP;
-        if ( ((double)1 / 4) * max_level_hp < h.getHp() &&
-                h.getHp() < ((double)1 / 3) * max_level_hp) {
-            h.damage((int)((double)1/4) * h.getHp());
-            h.addAngelDamage(0.70);
-        }
-        if (h.getHp() < ((double)1 / 4) * max_level_hp) {
-            h.addAngelDamage(-0.30);
-            h.addHp((int)((double)1/3) * h.getHp());
+        if ( ((float)1 / 4) * max_level_hp < h.getHp() &&
+                h.getHp() < ((float)1 / 3) * max_level_hp) {
+            h.damage((int)((float)1/4) * h.getHp());
+            h.addStrategyDamage(0.70f);
+        } else if (h.getHp() < ((float)1 / 4) * max_level_hp) {
+            h.addStrategyDamage(-0.30f);
+            h.addHp((int)((float)1/3) * h.getHp());
         }
     }
 }
