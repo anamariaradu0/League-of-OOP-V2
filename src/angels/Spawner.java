@@ -7,23 +7,18 @@ import magician.ObserveAngelRevive;
 
 import java.io.IOException;
 
-public class Spawner extends Angel {
-    public Spawner(String angelDetails) {
+public final class Spawner extends Angel {
+    public Spawner(final String angelDetails) {
         super(angelDetails);
     }
 
-    public void action(Hero h) throws IOException {
-        if (h.isDead() == true) {
+    public void action(final Hero h) throws IOException {
+        if (h.isDead()) {
             GrandMagician obs = new ObserveAngelHelp();
             obs.observe(h, null, this);
             obs = new ObserveAngelRevive();
             obs.observe(h, null, null);
             h.spawn();
         }
-    }
-
-    protected static void print(int x, int y, String type, int id, fileio.FileSystem fs) throws IOException {
-        fs.writeWord("Spawner helped " + type + " ");
-        fs.writeWord(id + "\n");
     }
 }

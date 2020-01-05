@@ -6,13 +6,13 @@ import heroes.Hero;
 
 import java.io.IOException;
 
-public class ObserveLevelUp extends GrandMagician {
+public final class ObserveLevelUp extends GrandMagician {
     @Override
-    public void observe(Hero a, Hero b, Angel c) throws IOException {
-        if (a.isDead() == false) {
+    public void observe(final Hero a, final Hero b, final Angel c) throws IOException {
+        if (!a.isDead()) {
             fileio.FileSystem fs = GameFlow.getFS();
 
-            fs.writeWord( a.type + " " + a.getId() + " reached level " + a.getLevel() + "\n");
+            fs.writeWord(a.type + " " + a.getId() + " reached level " + a.getLevel() + "\n");
         }
     }
 }

@@ -1,6 +1,9 @@
 package angels;
 
-public class AngelFactory {
+public final class AngelFactory {
+    private AngelFactory() {
+    }
+
     public static Angel getAngel(final String inputAngel) {
         String[] details = inputAngel.split(",");
         String name = details[0];

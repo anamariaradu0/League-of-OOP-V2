@@ -1,15 +1,11 @@
 package gameflow;
 
 import angels.Angel;
-import angels.TheDoomer;
-import angels.XPAngel;
-import fileio.FileSystem;
 import heroes.Hero;
 import heroes.HeroFactory;
 import magician.GrandMagician;
 import magician.ObserveAngelSpawn;
 import main.GameInput;
-import map.Cell;
 import map.Map;
 import strategies.Context;
 
@@ -17,7 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameFlow {
+public final class GameFlow {
     private static List<String> heroOrder;
     private static List<Integer> heroInitPositions;
     private static List<String> moves;
@@ -25,10 +21,13 @@ public class GameFlow {
     private static ArrayList<Hero> heroes;
     private static List<Integer> noAngels;
     private static List<String> angels;
-    public static fileio.FileSystem fs;
+    private static fileio.FileSystem fs;
 
-    public static void receiveFS(fileio.FileSystem fs) {
-        GameFlow.fs = fs;
+    private GameFlow() {
+    }
+
+    public static void receiveFS(final fileio.FileSystem fsystem) {
+        GameFlow.fs = fsystem;
     }
 
     public static fileio.FileSystem getFS() {
@@ -56,7 +55,7 @@ public class GameFlow {
 
     }
 
-    public static void addHeroesToMap(Map m) {
+    public static void addHeroesToMap(final Map m) {
         int poz = 0;
         int id = 0;
         for (Hero h : heroes) {
@@ -72,13 +71,11 @@ public class GameFlow {
         }
     }
 
-    public static void play(Map m, fileio.FileSystem fs) throws IOException {
+    public static void play(final Map m, final fileio.FileSystem fsystem) throws IOException {
         for (int i = 0; i < rounds; ++i) {
-            System.out.println("\n");
-            System.out.println("ROUND IS " + (i + 1));
-            fs.writeWord("~~ Round ");
-            fs.writeInt(i + 1);
-            fs.writeWord(" ~~\n");
+            fsystem.writeWord("~~ Round ");
+            fsystem.writeInt(i + 1);
+            fsystem.writeWord(" ~~\n");
             String currentMoves = moves.get(i);
             for (int j = 0; j < m.getmRows(); ++j) {
                 for (int k = 0; k < m.getmCols(); ++k) {
@@ -101,7 +98,7 @@ public class GameFlow {
             for (int j = 0; j < m.getmRows(); ++j) {
                 for (int k = 0; k < m.getmCols(); ++k) {
                     if (m.get(j, k).getCurrentHeroes() > 1) {
-                        m.get(j, k).battle(fs);
+                        m.get(j, k).battle();
                     }
                 }
             }
@@ -116,7 +113,6 @@ public class GameFlow {
 
                 String angelToParse = angels.get(aux + j);
                 String[] angelDetails = angelToParse.split(",");
-                // String name = angelDetails[0];
                 int angX = Integer.parseInt(angelDetails[1]);
                 int angY = Integer.parseInt(angelDetails[2]);
 
@@ -125,38 +121,33 @@ public class GameFlow {
 
                 m.get(angX, angY).sortCell();
                 for (Hero h : m.get(angX, angY).getAllHeroes()) {
-                    // m.get(angX, angY).printAllHeroes();
                     angel.action(h);
                 }
             }
-            // m.print();
-            // showLeaderBoard(fs);
-            fs.writeWord("\n");
+            fsystem.writeWord("\n");
         }
     }
 
-    public static void showLeaderBoard(fileio.FileSystem fs) throws IOException {
-        fs.writeWord("~~ Results ~~\n");
+    public static void showLeaderBoard(final fileio.FileSystem fsystem) throws IOException {
+        fsystem.writeWord("~~ Results ~~\n");
         for (int i = 0; i < heroes.size(); ++i) {
             if (heroes.get(i).isDead()) {
-                fs.writeWord(heroes.get(i).type.substring(0,1));
-                fs.writeWord(" dead");
-                fs.writeWord("\n");
+                fsystem.writeWord(heroes.get(i).type.substring(0, 1));
+                fsystem.writeWord(" dead");
+                fsystem.writeWord("\n");
             } else {
-                // fs.writeInt(heroes.get(i).getId());
-                // fs.writeWord(" ");
-                fs.writeWord(heroes.get(i).type.substring(0,1));
-                fs.writeWord(" ");
-                fs.writeInt(heroes.get(i).getLevel());
-                fs.writeWord(" ");
-                fs.writeInt(heroes.get(i).getXp());
-                fs.writeWord(" ");
-                fs.writeInt(heroes.get(i).getHp());
-                fs.writeWord(" ");
-                fs.writeInt(heroes.get(i).getRow());
-                fs.writeWord(" ");
-                fs.writeInt(heroes.get(i).getCol());
-                fs.writeWord("\n");
+                fsystem.writeWord(heroes.get(i).type.substring(0, 1));
+                fsystem.writeWord(" ");
+                fsystem.writeInt(heroes.get(i).getLevel());
+                fsystem.writeWord(" ");
+                fsystem.writeInt(heroes.get(i).getXp());
+                fsystem.writeWord(" ");
+                fsystem.writeInt(heroes.get(i).getHp());
+                fsystem.writeWord(" ");
+                fsystem.writeInt(heroes.get(i).getRow());
+                fsystem.writeWord(" ");
+                fsystem.writeInt(heroes.get(i).getCol());
+                fsystem.writeWord("\n");
             }
         }
     }

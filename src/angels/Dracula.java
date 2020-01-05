@@ -6,14 +6,14 @@ import magician.ObserveAngelHit;
 
 import java.io.IOException;
 
-public class Dracula extends Angel {
+public final class Dracula extends Angel {
 
-    public Dracula(String angelDetails) {
+    public Dracula(final String angelDetails) {
         super(angelDetails);
     }
 
-    public void action(Hero h) throws IOException {
-        if (h.isDead() == false) {
+    public void action(final Hero h) throws IOException {
+        if (!h.isDead()) {
             GrandMagician obs = new ObserveAngelHit();
             obs.observe(h, null, this);
             h.draculaDamage();

@@ -5,9 +5,9 @@ import heroes.Hero;
 import java.io.IOException;
 
 public class Angel {
-    static String angelDetails;
+    private static String angelDetails;
 
-    public Angel(String angelDetails) {
+    public Angel(final String angelDetails) {
         this.angelDetails = angelDetails;
     }
 
@@ -15,7 +15,12 @@ public class Angel {
         return angelDetails;
     }
 
-    public void action(Hero h) throws IOException {
+    /**
+     * Method that performs an angel action over a hero.
+     *
+     * Calls the 'action' method pertaining to each angel.
+     */
+    public void action(final Hero h) throws IOException {
         Angel angel = AngelFactory.getAngel(angelDetails);
         angel.action(h);
     }

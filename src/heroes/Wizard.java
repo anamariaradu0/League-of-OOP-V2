@@ -29,12 +29,9 @@ public final class Wizard extends Hero {
     }
 
     @Override
-    public void fight(Knight k) throws IOException {
+    public void fight(final Knight k) throws IOException {
         float percent = DRAIN_PERCENT + DRAIN_PERC_LVL * level;
         float damage = 0;
-
-        System.out.println("ANGEL DAMAGE IS  " + angelDamage + " FOR WIZARD " + this.id);
-        System.out.println("STRATEGY DAMAGE IS  " + strategyDamage + " FOR WIZARD " + this.id);
 
         percent += percent * (DRAIN_KNI_BONUS + angelDamage + strategyDamage);
         damage = percent * min(DRAIN_MIN * (KNI_INIT_HP + KNI_LVL_HP * k.getLevel()), k.getHp());
@@ -84,13 +81,12 @@ public final class Wizard extends Hero {
     }
 
     @Override
-    public void fight(Pyromancer k) throws IOException {
+    public void fight(final Pyromancer k) throws IOException {
         float percent = DRAIN_PERCENT + DRAIN_PERC_LVL * level;
         float damage = 0;
-        System.out.println("ANGEL DAMAGE IS  " + angelDamage + " FOR WIZARD " + this.id);
-        System.out.println("STRATEGY DAMAGE IS  " + strategyDamage + " FOR WIZARD " + this.id);
+
         percent -= percent * (DRAIN_PYR_BONUS - angelDamage - strategyDamage);
-        damage = percent * min(DRAIN_MIN * PYR_INIT_HP, k.getHp());
+        damage = percent * min(DRAIN_MIN * (PYR_INIT_HP + k.getLevel() * PYR_LVL_HP), k.getHp());
         if (currTerrain == 'D') {
             damage += damage * DESERT_BONUS;
         }
@@ -136,11 +132,10 @@ public final class Wizard extends Hero {
     }
 
     @Override
-    public void fight(Rogue k) throws IOException {
+    public void fight(final Rogue k) throws IOException {
         float percent = DRAIN_PERCENT + DRAIN_PERC_LVL * level;
         float damage = 0;
-        System.out.println("ANGEL DAMAGE IS  " + angelDamage + " FOR WIZARD " + this.id);
-        System.out.println("STRATEGY DAMAGE IS  " + strategyDamage + " FOR WIZARD " + this.id);
+
         percent -= percent * (DRAIN_ROG_BONUS - angelDamage - strategyDamage);
         damage = percent * min(DRAIN_MIN * (ROG_INIT_HP + k.getLevel() * ROG_LVL_HP), k.getHp());
         if (currTerrain == 'D') {
@@ -159,7 +154,7 @@ public final class Wizard extends Hero {
         percent += percent * (DEFLECT_ROG_BONUS + angelDamage + strategyDamage);
         float damage1 = BACKSTAB_DMG + BACKSTAB_LVL * k.getLevel();
         if (currTerrain == 'W') {
-            damage1 *= BACKSTAB_MULTIPLIER ;
+            damage1 *= BACKSTAB_MULTIPLIER;
             damage1 += damage1 * ROG_W_BONUS;
         }
         float damage2 = PARALYSIS_DMG + PARALYSIS_LVL * k.getLevel();
@@ -185,11 +180,9 @@ public final class Wizard extends Hero {
     }
 
     @Override
-    public void fight(Wizard w) throws IOException {
+    public void fight(final Wizard w) throws IOException {
         float percent = DRAIN_PERCENT + DRAIN_PERC_LVL * level;
         float damage = 0;
-        System.out.println("ANGEL DAMAGE IS  " + angelDamage + " FOR WIZARD " + this.id);
-        System.out.println("STRATEGY DAMAGE IS  " + strategyDamage + " FOR WIZARD " + this.id);
 
         percent += percent * (DRAIN_WIZ_BONUS + angelDamage + strategyDamage);
         damage = percent * min(DRAIN_MIN * (WIZ_INIT_HP + w.getLevel() * WIZ_LVL_HP), w.getHp());
@@ -209,7 +202,7 @@ public final class Wizard extends Hero {
     }
 
     @Override
-    public void fight(IHero h) throws IOException {
+    public void fight(final IHero h) throws IOException {
         h.fight(this);
     }
 
@@ -219,13 +212,13 @@ public final class Wizard extends Hero {
 
     @Override
     public void setAngelDamage() {
-        this.angelDamage += 0.4f;
+        this.angelDamage += WIZ_DAMAGEANGEL;
     }
 
     @Override
     public void draculaDamage() throws IOException {
-        this.damage(20);
-        this.angelDamage -= 0.40f;
+        this.damage(WIZ_DRACULA_DAMAGE);
+        this.angelDamage -= WIZ_DRACULA_MOD;
         if (this.hp < 0) {
             this.setDead(true);
             GrandMagician obs = new ObserveAngelKill();
@@ -235,22 +228,27 @@ public final class Wizard extends Hero {
 
     @Override
     public void goodBoyAction() {
-        this.addHp(50);
-        this.angelDamage += 0.30f;
+        this.addHp(WIZ_GOODBOY_HP);
+        this.angelDamage += WIZ_GOODBOY_MOD;
     }
 
     @Override
     public void smallAngelAction() {
-        this.addHp(25);
-        this.angelDamage += 0.10f;
+        this.addHp(WIZ_SMALLANGEL_HP);
+        this.angelDamage += WIZ_SMALLANGEL_MOD;
     }
 
     @Override
     public void lifeGiverAction() {
-        this.addHp(120);
+        this.addHp(WIZ_LIFEGIVER_HP);
         if (this.getHp() > WIZ_INIT_HP + level * WIZ_LVL_HP) {
             this.hp = WIZ_INIT_HP + level * WIZ_LVL_HP;
         }
+    }
+
+    @Override
+    public void darkAngelDamage() {
+        this.damage(WIZ_DA_DAMAGE);
     }
 
     @Override
@@ -258,15 +256,20 @@ public final class Wizard extends Hero {
         int nextXp = MAX_LVL_XP_LIMIT + level * MAX_LVL_XP_MULTIPLIER;
         this.setXp(nextXp - this.xp);
         this.levelUp();
-        this.angelDamage += 0.25f;
+        this.angelDamage += WIZ_LEVELUP_MOD;
+    }
+
+    @Override
+    public void xpAngelAction() throws IOException {
+        this.setXp(WIZ_XP_ANGEL);
+        this.levelUp();
     }
 
     @Override
     public void spawn() {
-        if (this.isDead() == true) {
+        if (this.isDead()) {
             this.setDead(false);
-            this.setHp(120);
-            // this.xp = 0;
+            this.setHp(WIZ_SPAWN_HP);
             Map.getInstance().get(this.getRow(), this.getCol()).reviveHero(this);
         }
     }

@@ -2,10 +2,9 @@ package main;
 
 import java.util.List;
 
-import heroes.Hero;
 import map.Map;
 
-public class GameInput {
+public final class GameInput {
     private final List<String> heroOrder;
     private final List<Integer> heroInitPositions;
     private final List<String> moves;
@@ -14,10 +13,9 @@ public class GameInput {
     private final List<Integer> noAngels;
     private final List<String> angels;
 
-
-
-    public GameInput(List<String> heroOrder, List<Integer> heroInitPositions,
-                     int rounds, List<String> moves, Map m, List<Integer> noAngels, List<String> angels) {
+    public GameInput(final List<String> heroOrder, final List<Integer> heroInitPositions,
+                     final int rounds, final List<String> moves, final Map m,
+                     final List<Integer> noAngels, final List<String> angels) {
         this.heroOrder = heroOrder;
         this.heroInitPositions = heroInitPositions;
         this.moves = moves;
@@ -27,19 +25,19 @@ public class GameInput {
         this.angels = angels;
     }
 
-    public final List<String> getHeroOrder() {
+    public List<String> getHeroOrder() {
         return heroOrder;
     }
 
-    public final List<Integer> getHeroInitPositions() {
+    public List<Integer> getHeroInitPositions() {
         return heroInitPositions;
     }
 
-    public final List<String> getMoves() {
+    public List<String> getMoves() {
         return moves;
     }
 
-    public final int getRounds() {
+    public int getRounds() {
         return rounds;
     }
 
@@ -51,11 +49,11 @@ public class GameInput {
         return angels;
     }
 
-    public final Map getMap() {
+    public Map getMap() {
         return map;
     }
 
-    public final boolean isValidInput() {
+    public boolean isValidInput() {
         boolean heroesInitiated = heroOrder != null && heroInitPositions != null;
         boolean heroesNotEmpty = heroOrder.size() > 0 && heroInitPositions.size() > 0;
         boolean heroesOk = heroesNotEmpty && heroesInitiated;
@@ -71,7 +69,7 @@ public class GameInput {
         return heroesOk && playOk && movesOk;
     }
 
-    public final void printAngels() {
+    public void printAngels() {
         int angelIndex = 0;
         for (int i = 0; i < rounds; ++i) {
             System.out.print(noAngels.get(i));
@@ -85,7 +83,7 @@ public class GameInput {
         }
     }
 
-    public final void printInput() {
+    public void printInput() {
         map.print();
         System.out.println("Heroes below");
         for (int i = 0; i < heroOrder.size(); ++i) {

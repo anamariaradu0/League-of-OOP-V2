@@ -1,12 +1,11 @@
 package strategies;
 
 import heroes.Hero;
-import heroes.Pyromancer;
 
-public class Context {
+public final class Context {
     private IStrategy strategy;
 
-    public Context(Hero h) {
+    public Context(final Hero h) {
         switch (h.type) {
             case "Knight":
                 this.strategy = new KnightStrategy();
@@ -23,7 +22,7 @@ public class Context {
         }
     }
 
-    public void executeStrategy(Hero h) {
+    public void executeStrategy(final Hero h) {
         strategy.applyStrategy(h);
     }
 }

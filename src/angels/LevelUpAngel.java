@@ -6,22 +6,17 @@ import magician.ObserveAngelHelp;
 
 import java.io.IOException;
 
-public class LevelUpAngel extends Angel {
-    public LevelUpAngel(String angelDetails) {
+public final class LevelUpAngel extends Angel {
+    public LevelUpAngel(final String angelDetails) {
         super(angelDetails);
     }
 
-    public void action(Hero h) throws IOException {
-        if (h.isDead() == false) {
+    public void action(final Hero h) throws IOException {
+        if (!h.isDead()) {
             GrandMagician obs = new ObserveAngelHelp();
             obs.observe(h, null, this);
             h.levelUpAction();
         }
 
-    }
-
-    protected static void print(int x, int y, String type, int id, fileio.FileSystem fs) throws IOException {
-        fs.writeWord("LevelUpAngel helped " + type + " ");
-        fs.writeWord(id + "\n");
     }
 }

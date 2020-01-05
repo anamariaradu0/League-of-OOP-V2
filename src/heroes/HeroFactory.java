@@ -1,6 +1,10 @@
 package heroes;
 
-public class HeroFactory {
+public final class HeroFactory {
+    private HeroFactory() {
+
+    }
+
     public static Hero getHero(final String inputHero) {
         switch (inputHero) {
             case "W":

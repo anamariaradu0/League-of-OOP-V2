@@ -30,8 +30,8 @@ public final class Rogue extends Hero {
     }
 
     @Override
-    public void fight(Knight k) throws IOException {
-        float damage = (float)BACKSTAB_DMG + BACKSTAB_LVL * level;
+    public void fight(final Knight k) throws IOException {
+        float damage = (float) BACKSTAB_DMG + BACKSTAB_LVL * level;
         if (currTerrain == 'W') {
             damage += damage * (ROG_W_BONUS + angelDamage);
             if (noHit % BACKSTAB_CRIT == 0) {
@@ -40,24 +40,21 @@ public final class Rogue extends Hero {
         }
         damage -= damage * (BACKSTAB_K_BONUS - angelDamage - strategyDamage);
         ++noHit;
-        System.out.println("BACKSTAB DAMAGE " + damage);
         damage = Math.round(damage);
         k.damage((int) damage);
 
 
-        damage = (float)PARALYSIS_DMG + PARALYSIS_LVL * level;
+        damage = (float) PARALYSIS_DMG + PARALYSIS_LVL * level;
         if (currTerrain == 'W') {
             damage += damage * (ROG_W_BONUS + angelDamage);
             k.setParalysisEffect(PARALYSIS_WOODS);
         } else {
             k.setParalysisEffect(PARALYSIS_ROUNDS);
         }
-        damage -= damage * (PARALYSIS_K_BONUS - angelDamage + 0.0000001f - strategyDamage);
-        System.out.println("PARALYSIS DAMAGE " + damage);
+        damage -= damage * (PARALYSIS_K_BONUS - angelDamage + APPROX - strategyDamage);
         k.setParalysisDmg((int) Math.round(damage));
         damage = Math.round(damage);
         k.damage((int) damage);
-        System.out.println("PARALYSIS DAMAGE " + damage);
 
         k.setCanMove(false);
         if (k.getHp() < 0) {
@@ -70,7 +67,7 @@ public final class Rogue extends Hero {
     }
 
     @Override
-    public void fight(Pyromancer k) throws IOException {
+    public void fight(final Pyromancer k) throws IOException {
         float damage = BACKSTAB_DMG + BACKSTAB_LVL * level;
         if (currTerrain == 'W') {
             damage += damage * (ROG_W_BONUS + angelDamage);
@@ -81,8 +78,6 @@ public final class Rogue extends Hero {
         damage += damage * (BACKSTAB_PYR_BONUS + angelDamage + strategyDamage);
         ++noHit;
         k.damage((int) Math.round(damage));
-
-        System.out.println("BACKSTAB DAMAGE " + damage);
 
         damage = PARALYSIS_DMG + PARALYSIS_LVL * level;
         if (currTerrain == 'W') {
@@ -95,8 +90,6 @@ public final class Rogue extends Hero {
         k.setParalysisDmg((int) Math.round(damage));
         k.damage((int) Math.round(damage));
         k.setCanMove(false);
-
-        System.out.println("PARALYSIS DAMAGE " + damage);
         if (k.getHp() < 0) {
             k.setDead(true);
             int xp = max(0, MAX_XP_LIMIT - (this.level - k.getLevel()) * MAX_XP_MULTIPLIER);
@@ -107,7 +100,7 @@ public final class Rogue extends Hero {
     }
 
     @Override
-    public void fight(Rogue k) throws IOException {
+    public void fight(final Rogue k) throws IOException {
         float damage = BACKSTAB_DMG + BACKSTAB_LVL * level;
         if (currTerrain == 'W') {
             damage += damage * (ROG_W_BONUS + angelDamage);
@@ -118,7 +111,6 @@ public final class Rogue extends Hero {
         damage += damage * (BACKSTAB_ROG_BONUS + angelDamage + strategyDamage);
         ++noHit;
         k.damage((int) Math.round(damage));
-        System.out.println("BACKSTAB DAMAGE " + damage);
 
         damage = PARALYSIS_DMG + PARALYSIS_LVL * level;
         if (currTerrain == 'W') {
@@ -127,11 +119,9 @@ public final class Rogue extends Hero {
         } else {
             k.setParalysisEffect(PARALYSIS_ROUNDS);
         }
-        //System.out.println("PARALYSIS DAMAGE " + damage);
-        damage -= damage * (PARALYSIS_ROG_BONUS - angelDamage + 0.0000002f - strategyDamage);
+        damage -= damage * (PARALYSIS_ROG_BONUS - angelDamage + APPROXIMATE - strategyDamage);
         k.setParalysisDmg((int) Math.round(damage));
         k.damage((int) Math.round(damage));
-        System.out.println("PARALYSIS DAMAGE " + damage);
         k.setCanMove(false);
         if (k.getHp() < 0) {
             k.setDead(true);
@@ -143,7 +133,7 @@ public final class Rogue extends Hero {
     }
 
     @Override
-    public void fight(Wizard k) throws IOException {
+    public void fight(final Wizard k) throws IOException {
         float damage = BACKSTAB_DMG + BACKSTAB_LVL * level;
         if (currTerrain == 'W') {
             damage += damage * ROG_W_BONUS;
@@ -176,19 +166,19 @@ public final class Rogue extends Hero {
     }
 
     @Override
-    public void fight(IHero h) throws IOException {
+    public void fight(final IHero h) throws IOException {
         h.fight(this);
     }
 
     @Override
     public void setAngelDamage() {
-        this.angelDamage += 0.3f;
+        this.angelDamage += ROG_DAMAGEANGEL;
     }
 
     @Override
     public void draculaDamage() throws IOException {
-        this.damage(35);
-        this.angelDamage -= 0.10f;
+        this.damage(ROG_DRACULA_DAMAGE);
+        this.angelDamage -= ROG_DRACULA_MOD;
         if (this.hp < 0) {
             this.setDead(true);
             GrandMagician obs = new ObserveAngelKill();
@@ -198,19 +188,24 @@ public final class Rogue extends Hero {
 
     @Override
     public void goodBoyAction() {
-        this.addHp(40);
-        this.angelDamage += 0.40f;
+        this.addHp(ROG_GOODBOY_HP);
+        this.angelDamage += ROG_GOODBOY_MOD;
     }
 
     @Override
     public void smallAngelAction() {
-        this.addHp(20);
-        this.angelDamage += 0.05f;
+        this.addHp(ROG_SMALLANGEL_HP);
+        this.angelDamage += ROG_SMALLANGEL_MOD;
+    }
+
+    @Override
+    public void darkAngelDamage() {
+        this.damage(ROG_DA_DAMAGE);
     }
 
     @Override
     public void lifeGiverAction() {
-        this.addHp(90);
+        this.addHp(ROG_LIFEGIVER_HP);
         if (this.getHp() > ROG_INIT_HP + level * ROG_LVL_HP) {
             this.hp = ROG_INIT_HP + level * ROG_LVL_HP;
         }
@@ -221,15 +216,20 @@ public final class Rogue extends Hero {
         int nextXp = MAX_LVL_XP_LIMIT + level * MAX_LVL_XP_MULTIPLIER;
         this.setXp(nextXp - this.xp);
         this.levelUp();
-        this.angelDamage += 0.15f;
+        this.angelDamage += ROG_LEVELUP_MOD;
+    }
+
+    @Override
+    public void xpAngelAction() throws IOException {
+        this.setXp(ROG_XP_ANGEL);
+        this.levelUp();
     }
 
     @Override
     public void spawn() {
-        if (this.isDead() == true) {
+        if (this.isDead()) {
             this.setDead(false);
-            this.setHp(180);
-            // this.xp = 0;
+            this.setHp(ROG_SPAWN_HP);
             Map.getInstance().get(this.getRow(), this.getCol()).reviveHero(this);
         }
     }

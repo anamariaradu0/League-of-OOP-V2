@@ -10,7 +10,7 @@ public final class GameInputLoader {
     private final String inPath;
     private final String outPath;
 
-    public GameInputLoader(String inPath, String outPath) {
+    public GameInputLoader(final String inPath, final String outPath) {
         this.inPath = inPath;
         this.outPath = outPath;
     }
@@ -65,7 +65,7 @@ public final class GameInputLoader {
                 int aux = fs.nextInt();
                 noAngels.add(aux);
                 if (aux != 0) {
-                    for (int j = 0; j < aux; ++j){
+                    for (int j = 0; j < aux; ++j) {
                         angels.add(fs.nextWord());
                     }
                 }

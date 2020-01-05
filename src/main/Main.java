@@ -3,8 +3,11 @@ package main;
 import fileio.FileSystem;
 import gameflow.GameFlow;
 
-public class Main {
-    public static void main(String[] args) {
+public final class Main {
+    private Main() {
+    }
+
+    public static void main(final String[] args) {
         try {
             FileSystem fs = new FileSystem(args[0], args[1]);
             GameInputLoader gameInputLoader = new GameInputLoader(args[0], args[1]);

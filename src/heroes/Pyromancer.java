@@ -1,6 +1,5 @@
 package heroes;
 
-import jdk.swing.interop.SwingInterOpUtils;
 import magician.GrandMagician;
 import magician.ObserveAngelKill;
 import magician.ObserveHeroKill;
@@ -27,12 +26,12 @@ public final class Pyromancer extends Hero {
     }
 
     @Override
-    public void fight(IHero h) throws IOException {
+    public void fight(final IHero h) throws IOException {
         h.fight(this);
     }
 
     @Override
-    public void fight(Knight k) throws IOException {
+    public void fight(final Knight k) throws IOException {
             float damage = FIREBLAST_DMG + level * FIREBLAST_LVL;
             if (currTerrain == 'V') {
                 damage += damage * PYR_V_BONUS;
@@ -52,7 +51,6 @@ public final class Pyromancer extends Hero {
 
             k.damage((int) Math.round(damage));
             k.setPyroDmg((int) Math.round(periodicDmg));
-            System.out.println("Periodic damage is " + periodicDmg + "\n");
             k.setPyroEffect(2);
 
             if (k.getHp() < 0) {
@@ -65,7 +63,7 @@ public final class Pyromancer extends Hero {
     }
 
     @Override
-    public void fight(Pyromancer k) throws IOException {
+    public void fight(final Pyromancer k) throws IOException {
         float damage = FIREBLAST_DMG + level * FIREBLAST_LVL;
         if (currTerrain == 'V') {
             damage += damage * PYR_V_BONUS;
@@ -98,7 +96,7 @@ public final class Pyromancer extends Hero {
     }
 
     @Override
-    public void fight(Rogue k) throws IOException {
+    public void fight(final Rogue k) throws IOException {
         float damage = FIREBLAST_DMG + level * FIREBLAST_LVL;
         if (currTerrain == 'V') {
             damage += damage * PYR_V_BONUS;
@@ -113,15 +111,12 @@ public final class Pyromancer extends Hero {
             periodicDmg += periodicDmg * PYR_V_BONUS;
         }
 
-        System.out.println("FIREBLAST DAMAGE " + damage);
-
         damage -= damage * (IGNITE_ROG_BONUS - angelDamage - strategyDamage);
         periodicDmg -= periodicDmg * (IGNITE_ROG_BONUS - angelDamage - strategyDamage);
 
         k.damage((int) Math.round(damage));
         k.setPyroDmg((int) Math.round(periodicDmg));
         k.setPyroEffect(2);
-        System.out.println("IGNITE DAMAGE " + damage);
         if (k.getHp() < 0) {
             k.setDead(true);
             int xp = max(0, MAX_XP_LIMIT - (this.level - k.getLevel()) * MAX_XP_MULTIPLIER);
@@ -132,7 +127,7 @@ public final class Pyromancer extends Hero {
     }
 
     @Override
-    public void fight(Wizard k) throws IOException {
+    public void fight(final Wizard k) throws IOException {
         float damage = FIREBLAST_DMG + level * FIREBLAST_LVL;
         if (currTerrain == 'V') {
             damage += damage * PYR_V_BONUS;
@@ -153,7 +148,7 @@ public final class Pyromancer extends Hero {
 
         damage = Math.round(damage);
         k.damage((int) Math.round(damage));
-        k.setPyroDmg((int)Math.round(periodicDmg));
+        k.setPyroDmg((int) Math.round(periodicDmg));
         k.setPyroEffect(2);
 
         if (k.getHp() < 0) {
@@ -167,13 +162,13 @@ public final class Pyromancer extends Hero {
 
     @Override
     public void setAngelDamage() {
-        this.angelDamage += 0.2f;
+        this.angelDamage += PYR_DAMAGEANGEL;
     }
 
     @Override
     public void draculaDamage() throws IOException {
-        this.damage(40);
-        this.angelDamage -= 0.30f;
+        this.damage(PYR_DRACULA_DAMAGE);
+        this.angelDamage -= PYR_DRACULA_MOD;
         if (this.hp < 0) {
             this.setDead(true);
             GrandMagician obs = new ObserveAngelKill();
@@ -183,39 +178,48 @@ public final class Pyromancer extends Hero {
 
     @Override
     public void goodBoyAction() {
-        this.addHp(30);
-        this.angelDamage += 0.50f;
+        this.addHp(PYR_GOODBOY_HP);
+        this.angelDamage += PYR_GOODBOY_MOD;
     }
 
     @Override
     public void smallAngelAction() {
-        this.addHp(15);
-        this.angelDamage += 0.15f;
+        this.addHp(PYR_SMALLANGEL_HP);
+        this.angelDamage += PYR_SMALLANGEL_MOD;
     }
 
     @Override
     public void lifeGiverAction() {
-        this.addHp(80);
+        this.addHp(PYR_LIFEGIVER_HP);
         if (this.getHp() > PYR_INIT_HP + level * PYR_LVL_HP) {
             this.hp = PYR_INIT_HP + level * PYR_LVL_HP;
         }
     }
 
     @Override
+    public void darkAngelDamage() {
+        this.damage(PYR_DA_DAMAGE);
+    }
+
+    @Override
     public void levelUpAction() throws IOException {
         int nextXp = MAX_LVL_XP_LIMIT + (this.level) * MAX_LVL_XP_MULTIPLIER;
-        System.out.println("NEXT XP IS " + nextXp + "\n");
         this.setXp(nextXp - this.xp);
         this.levelUp();
-        this.angelDamage += 0.20f;
+        this.angelDamage += PYR_LEVELUP_MOD;
+    }
+
+    @Override
+    public void xpAngelAction() throws IOException {
+        this.setXp(PYR_XP_ANGEL);
+        this.levelUp();
     }
 
     @Override
     public void spawn() {
-        if (this.isDead() == true) {
+        if (this.isDead()) {
             this.setDead(false);
-            this.setHp(150);
-            // this.xp = 0;
+            this.setHp(PYR_SPAWN_HP);
             Map.getInstance().get(this.getRow(), this.getCol()).reviveHero(this);
         }
     }
@@ -236,7 +240,4 @@ public final class Pyromancer extends Hero {
     public void maxHp() {
         setHp(PYR_INIT_HP + level * PYR_LVL_HP);
     }
-
-
-
 }

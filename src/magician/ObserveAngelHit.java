@@ -6,9 +6,9 @@ import heroes.Hero;
 
 import java.io.IOException;
 
-public class ObserveAngelHit extends GrandMagician {
+public final class ObserveAngelHit extends GrandMagician {
     @Override
-    public void observe(Hero a, Hero b, Angel c) throws IOException {
+    public void observe(final Hero a, final Hero b, final Angel c) throws IOException {
         String[] details = Angel.getAngelDetails().split(",");
         String name = details[0];
 

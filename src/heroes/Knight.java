@@ -30,13 +30,12 @@ public final class Knight extends Hero {
 
 
     @Override
-    public void fight(IHero h) throws IOException {
+    public void fight(final IHero h) throws IOException {
         h.fight(this);
     }
 
     @Override
-    public void fight(Knight k) throws IOException {
-        // System.out.println("ANGEL DAMAGE IS " + angelDamage + "\n");
+    public void fight(final Knight k) throws IOException {
         float hpLimit = k.getHp() * EXECUTE_LIMIT;
         if (k.getHp() < hpLimit) {
             k.die();
@@ -50,9 +49,8 @@ public final class Knight extends Hero {
                 dmg += dmg * KNI_L_BONUS;
                 dmg = Math.round(dmg);
             }
-            // dmg += dmg * angelDamage;
             dmg = Math.round(dmg);
-            k.damage((int)dmg);
+            k.damage((int) dmg);
         }
 
         if (!k.isDead()) {
@@ -62,13 +60,13 @@ public final class Knight extends Hero {
                 dmg = Math.round(dmg);
                 dmg += dmg * KNI_L_BONUS;
                 dmg = Math.round(dmg);
-                k.damage((int)dmg);
+                k.damage((int) dmg);
                 k.setCanMove(false);
                 k.setMoveEffect(1);
             } else {
                 dmg += dmg * (SLAM_K_BONUS + angelDamage + strategyDamage);
                 dmg = Math.round(dmg);
-                k.damage((int)dmg);
+                k.damage((int) dmg);
                 k.setCanMove(false);
                 k.setMoveEffect(1);
             }
@@ -84,9 +82,7 @@ public final class Knight extends Hero {
     }
 
     @Override
-    public void fight(Pyromancer k) throws IOException {
-        // System.out.println(this.canMove);
-        System.out.println("KNIGHT ANGEL MULTI IS " + angelDamage + "\n");
+    public void fight(final Pyromancer k) throws IOException {
             float hpLimit = PYR_INIT_HP * EXECUTE_LIMIT;
             if (k.getHp() < hpLimit) {
                 k.die();
@@ -102,7 +98,7 @@ public final class Knight extends Hero {
                     dmg = Math.round(dmg);
                 }
                 dmg = Math.round(dmg);
-                k.damage((int)dmg);
+                k.damage((int) dmg);
                 System.out.println(dmg + "\n");
             }
 
@@ -136,7 +132,7 @@ public final class Knight extends Hero {
     }
 
     @Override
-    public void fight(Rogue k) throws IOException {
+    public void fight(final Rogue k) throws IOException {
         float hpLimit = ROG_INIT_HP * EXECUTE_LIMIT;
         if (k.getHp() < hpLimit) {
             k.die();
@@ -154,7 +150,7 @@ public final class Knight extends Hero {
 
             dmg += dmg * (EXECUTE_ROG_BONUS + angelDamage + strategyDamage);
             dmg = Math.round(dmg);
-            k.damage(Math.round((int)dmg));
+            k.damage(Math.round((int) dmg));
         }
 
         if (!k.isDead()) {
@@ -164,13 +160,13 @@ public final class Knight extends Hero {
                 dmg = Math.round(dmg);
                 dmg -= dmg * (SLAM_ROG_BONUS - angelDamage - strategyDamage);
                 dmg = Math.round(dmg);
-                k.damage((int)dmg);
+                k.damage((int) dmg);
                 k.setCanMove(false);
                 k.setMoveEffect(1);
             } else {
                 dmg -= dmg * (SLAM_ROG_BONUS - angelDamage - strategyDamage);
                 dmg = Math.round(dmg);
-                k.damage((int)dmg);
+                k.damage((int) dmg);
                 k.setCanMove(false);
                 k.setMoveEffect(1);
             }
@@ -186,7 +182,7 @@ public final class Knight extends Hero {
     }
 
     @Override
-    public void fight(Wizard k) throws IOException {
+    public void fight(final Wizard k) throws IOException {
         float hpLimit = WIZ_INIT_HP * EXECUTE_LIMIT;
         if (k.getHp() < hpLimit) {
             k.die();
@@ -202,7 +198,7 @@ public final class Knight extends Hero {
                 dmg = Math.round(dmg);
             }
             dmg = Math.round(dmg);
-            k.damage((int)dmg);
+            k.damage((int) dmg);
             System.out.println(" EXECUTE DAMAGE " + dmg);
         }
 
@@ -215,14 +211,14 @@ public final class Knight extends Hero {
                 dmg = Math.round(dmg);
                 dmg += dmg * (SLAM_WIZ_BONUS + angelDamage + strategyDamage);
                 dmg = Math.round(dmg);
-                k.damage((int)dmg);
+                k.damage((int) dmg);
                 k.setCanMove(false);
                 k.setMoveEffect(1);
                 System.out.println(" SLAM DAMAGE " + dmg);
             } else {
                 dmg += dmg * (SLAM_WIZ_BONUS + angelDamage + strategyDamage);
                 dmg = Math.round(dmg);
-                k.damage((int)dmg);
+                k.damage((int) dmg);
                 k.setCanMove(false);
                 k.setMoveEffect(1);
                 System.out.println(" SLAM DAMAGE " + dmg);
@@ -242,13 +238,13 @@ public final class Knight extends Hero {
 
     @Override
     public void setAngelDamage() {
-        this.angelDamage += 0.15f;
+        this.angelDamage += KNI_DAMAGEANGEL;
     }
 
     @Override
     public void draculaDamage() throws IOException {
-        this.damage(60);
-        this.angelDamage -= 0.20f;
+        this.damage(KNI_DRACULA_DAMAGE);
+        this.angelDamage -= KNI_DRACULA_MOD;
         if (this.hp < 0) {
             this.setDead(true);
             GrandMagician obs = new ObserveAngelKill();
@@ -258,22 +254,27 @@ public final class Knight extends Hero {
 
     @Override
     public void goodBoyAction() {
-        this.addHp(20);
-        this.angelDamage += 0.40f;
+        this.addHp(KNI_GOODBOY_HP);
+        this.angelDamage += KNI_GOODBOY_MOD;
     }
 
     @Override
     public void smallAngelAction() {
-        this.addHp(10);
-        this.angelDamage += 0.10f;
+        this.addHp(KNI_SMALLANGEL_HP);
+        this.angelDamage += KNI_SMALLANGEL_MOD;
     }
 
     @Override
     public void lifeGiverAction() {
-        this.addHp(100);
+        this.addHp(KNI_LIFEGIVER_HP);
         if (this.getHp() > KNI_INIT_HP + level * KNI_LVL_HP) {
             this.hp = KNI_INIT_HP + level * KNI_LVL_HP;
         }
+    }
+
+    @Override
+    public void darkAngelDamage() {
+        this.damage(KNI_DA_DAMAGE);
     }
 
     @Override
@@ -281,15 +282,20 @@ public final class Knight extends Hero {
         int nextXp = MAX_LVL_XP_LIMIT + level * MAX_LVL_XP_MULTIPLIER;
         this.setXp(nextXp - this.xp);
         this.levelUp();
-        this.angelDamage += 0.10f;
+        this.angelDamage += KNI_LEVELUP_MOD;
+    }
+
+    @Override
+    public void xpAngelAction() throws IOException {
+        this.setXp(KNI_XP_ANGEL);
+        this.levelUp();
     }
 
     @Override
     public void spawn() {
-        if (this.isDead() == true) {
+        if (this.isDead()) {
             this.setDead(false);
-            this.setHp(200);
-            // this.xp = 0;
+            this.setHp(KNI_SPAWN_HP);
             Map.getInstance().get(this.getRow(), this.getCol()).reviveHero(this);
         }
     }

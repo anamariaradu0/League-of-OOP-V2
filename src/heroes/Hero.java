@@ -4,6 +4,8 @@ import map.Map;
 
 import java.io.IOException;
 
+import static common.Constants.MAX_MAP;
+
 public abstract class Hero implements IHero {
     protected int id;
     public String type;
@@ -19,37 +21,32 @@ public abstract class Hero implements IHero {
     protected int pyroDmg;
     protected int paralysisEffect;
     protected int paralysisDmg;
-    protected int kill = 0;
     protected int moveEffect = 0;
     protected float angelDamage = 0f;
     protected float strategyDamage = 0f;
     protected int possibleXp = 0;
     public fileio.FileSystem fs;
 
-    public void giveXp() {
-        System.out.println("GIVING XP " + possibleXp);
+
+    public final void giveXp() {
         this.xp += this.possibleXp;
     }
 
-    public void addStrategyDamage(float dmg) {
+
+    public final void addStrategyDamage(final float dmg) {
         strategyDamage += dmg;
     }
-    public void setStrategyDamage(float dmg) {
-        strategyDamage = dmg;
-    }
-    public int getId() {
+
+
+    public final int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public final void setId(final int id) {
         this.id = id;
     }
 
-    public void addAngelDamage (float dmg) {
-        this.angelDamage += dmg;
-    }
-
-    public boolean canMove() {
+    public final boolean canMove() {
         return canMove;
     }
 
@@ -57,19 +54,21 @@ public abstract class Hero implements IHero {
     public abstract void draculaDamage() throws IOException;
     public abstract void goodBoyAction();
     public abstract void smallAngelAction();
+    public abstract void xpAngelAction() throws IOException;
     public abstract void lifeGiverAction();
     public abstract void levelUpAction() throws IOException;
     public abstract void spawn();
+    public abstract void darkAngelDamage();
 
     public final int getXp() {
         return xp;
     }
 
-    public final void setXp(int xp) {
+    public final void setXp(final int xp) {
         this.xp += xp;
     }
 
-    public final void setCanMove(boolean canMove) {
+    public final void setCanMove(final boolean canMove) {
         this.canMove = canMove;
     }
 
@@ -81,15 +80,15 @@ public abstract class Hero implements IHero {
         return pozCol;
     }
 
-    public final void setHp(int hp) {
-        this.hp = hp;
+    public final void setHp(final int mhp) {
+        this.hp = mhp;
     }
 
-    public final void addHp(int hp) {
-        this.hp += hp;
+    public final void addHp(final int mhp) {
+        this.hp += mhp;
     }
 
-    public final void damage(int mhp) {
+    public final void damage(final int mhp) {
         hp -= mhp;
     }
 
@@ -101,45 +100,41 @@ public abstract class Hero implements IHero {
         return dead;
     }
 
-    public final void setMoveEffect(int moveEffect) {
+    public final void setMoveEffect(final int moveEffect) {
         this.moveEffect = moveEffect;
     }
 
-    public final void setDead(boolean dead) {
+    public final void setDead(final boolean dead) {
         this.dead = dead;
     }
 
-    public final void setCurrTerrain(char currTerrain) {
+    public final void setCurrTerrain(final char currTerrain) {
         this.currTerrain = currTerrain;
     }
 
-    public final void setPyroEffect(int pyroEffect) {
+    public final void setPyroEffect(final int pyroEffect) {
         this.pyroEffect += pyroEffect;
     }
 
-    public final void setPyroDmg(int pyroDmg) {
+    public final void setPyroDmg(final int pyroDmg) {
         this.pyroDmg += pyroDmg;
     }
 
-    public final void setParalysisEffect(int paralysisEffect) {
+    public final void setParalysisEffect(final int paralysisEffect) {
         this.paralysisEffect += paralysisEffect;
         canMove = false;
     }
 
-    public final void setParalysisDmg(int paralysisDmg) {
+    public final void setParalysisDmg(final int paralysisDmg) {
         this.paralysisDmg += paralysisDmg;
     }
 
     public final void previousEffects() {
-        // System.out.println(this.type);
-        // System.out.println("FIRST " + canMove + "\n");
-        // System.out.println("MOVE EFFECT IS " + moveEffect + "\n");
         if (moveEffect == 0 && paralysisEffect == 0) {
             canMove = true;
         }
 
         if (moveEffect > 0) {
-            // System.out.println("CAN'T MOVE\n");
             --moveEffect;
         }
 
@@ -164,14 +159,13 @@ public abstract class Hero implements IHero {
         if (hp < 0) {
             this.setDead(true);
         }
-        // System.out.println("SECOND " + canMove);
     }
 
     public final int getLevel() {
         return level;
     }
 
-    public final void setRowCol(int row, int col) {
+    public final void setRowCol(final int row, final int col) {
         pozRow = row;
         pozCol = col;
     }
@@ -182,28 +176,52 @@ public abstract class Hero implements IHero {
         dead = true;
     }
 
-    public final void move(String s, Map m) {
+    public final void move(final String s, final Map m) {
         if (this.canMove) {
             if (s.contains("U")) {
-                m.get(pozRow, pozCol).moveHero(this);
-                --pozRow;
-                m.get(pozRow, pozCol).addHero(this);
-                currTerrain = m.get(pozRow, pozCol).getType();
+                if (pozRow >= 0 && pozRow < MAX_MAP && pozCol >= 0 && pozCol < MAX_MAP) {
+                    m.get(pozRow, pozCol).moveHero(this);
+                    --pozRow;
+                    if (pozRow >= 0 && pozRow < MAX_MAP) {
+                        m.get(pozRow, pozCol).addHero(this);
+                        currTerrain = m.get(pozRow, pozCol).getType();
+                    }
+                } else {
+                    --pozRow;
+                }
             } else if (s.contains("D")) {
-                m.get(pozRow, pozCol).moveHero(this);
-                ++pozRow;
-                m.get(pozRow, pozCol).addHero(this);
-                currTerrain = m.get(pozRow, pozCol).getType();
+                if (pozRow >= 0 && pozRow < MAX_MAP && pozCol >= 0 && pozCol < MAX_MAP) {
+                    m.get(pozRow, pozCol).moveHero(this);
+                    ++pozRow;
+                    if (pozRow >= 0 && pozRow < MAX_MAP) {
+                        m.get(pozRow, pozCol).addHero(this);
+                        currTerrain = m.get(pozRow, pozCol).getType();
+                    }
+                } else {
+                    ++pozRow;
+                }
             } else if (s.contains("L")) {
-                m.get(pozRow, pozCol).moveHero(this);
-                --pozCol;
-                m.get(pozRow, pozCol).addHero(this);
-                currTerrain = m.get(pozRow, pozCol).getType();
+                if (pozRow >= 0 && pozRow < MAX_MAP && pozCol >= 0 && pozCol < MAX_MAP) {
+                    m.get(pozRow, pozCol).moveHero(this);
+                    --pozCol;
+                    if (pozCol >= 0 && pozCol < MAX_MAP) {
+                        m.get(pozRow, pozCol).addHero(this);
+                        currTerrain = m.get(pozRow, pozCol).getType();
+                    }
+                } else {
+                    --pozCol;
+                }
             } else if (s.contains("R")) {
-                m.get(pozRow, pozCol).moveHero(this);
-                ++pozCol;
-                m.get(pozRow, pozCol).addHero(this);
-                currTerrain = m.get(pozRow, pozCol).getType();
+                if (pozRow >= 0 && pozRow < MAX_MAP && pozCol >= 0 && pozCol < MAX_MAP) {
+                    m.get(pozRow, pozCol).moveHero(this);
+                    ++pozCol;
+                    if (pozCol >= 0 && pozCol < MAX_MAP) {
+                        m.get(pozRow, pozCol).addHero(this);
+                        currTerrain = m.get(pozRow, pozCol).getType();
+                    }
+                } else {
+                    ++pozCol;
+                }
             }
         }
     }

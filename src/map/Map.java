@@ -28,15 +28,15 @@ public final class Map {
         return mRows;
     }
 
-    public void setmRows(int mRows) {
+    public void setmRows(final int mRows) {
         this.mRows = mRows;
     }
 
-    public void setmCols(int mCols) {
+    public void setmCols(final int mCols) {
         this.mCols = mCols;
     }
 
-    public void createMap(int rows, int cols) {
+    public void createMap(final int rows, final int cols) {
         this.mCols = cols;
         this.mRows = rows;
         map = new Cell[rows][cols];
@@ -47,11 +47,11 @@ public final class Map {
         }
     }
 
-    public void setCell(int i, int j, char type) {
+    public void setCell(final int i, final int j, final char type) {
         map[i][j].setType(type);
     }
 
-    public Cell get(int i, int j) {
+    public Cell get(final int i, final int j) {
         return map[i][j];
     }
 
@@ -59,7 +59,8 @@ public final class Map {
         for (int i = 0; i < mRows; ++i) {
             for (int j = 0; j < mCols; ++j) {
                 for (Hero k : map[i][j].getAllHeroes()) {
-                    System.out.println(k.type + " " + k.getId() +" "+ k.getRow()+ " " + k.getCol());
+                    System.out.println(k.type + " " + k.getId() + " "
+                            + k.getRow() + " " + k.getCol());
                 }
             }
             System.out.println("\n");
