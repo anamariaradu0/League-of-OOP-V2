@@ -20,3 +20,12 @@ opinion).
 Seen as heroes are both visitors and visitable objects, all that I had to implement
 in each hero's class was fighting with the 4 types of opponents, keeping in mind each
 particular case and all of the bonuses.
+
+The Grand Magician is implemented using an Observer Pattern and is designed to keep
+track of everything that happens during the game: it receives updates on hero deaths,
+hero evolution, angel spawns and so on.
+
+Each player can pick a strategy (behaviour implemented using the Strategy Pattern),
+based on their HP.
+
+The angels act as visitors to the heroes and can be observed by the Grand Magician.
